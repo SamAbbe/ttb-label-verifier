@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import numpy; print\\(numpy.__version__\\)\")",
+      "WebFetch(domain:www.ttb.gov)"
+    ]
+  }
+}

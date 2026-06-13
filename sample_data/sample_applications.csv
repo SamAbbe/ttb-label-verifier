@@ -1,0 +1,6 @@
+filename,brand_name,class_type,alcohol_content,net_contents,bottler_info,country_of_origin
+label_01_match.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_02_case_diff.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_03_bad_warning.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_04_wrong_abv.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_05_import_skewed.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico

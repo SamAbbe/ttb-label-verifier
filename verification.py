@@ -55,8 +55,62 @@ def normalize(text: str) -> str:
     return text
 
 
+def _tokenize_with_normalization(text: str):
+    """Split text into whitespace-delimited tokens, with a normalized form.
+
+    Returns (raw_tokens, norm_words, word_to_token):
+      - raw_tokens: the original-case tokens (substrings of `text`)
+      - norm_words: normalized words derived from those tokens (a single
+        token can expand into multiple normalized words, e.g. "Stone's"
+        -> "STONE", "S")
+      - word_to_token: for each entry in norm_words, the index of the
+        raw_token it came from
+    """
+    raw_tokens = text.split()
+    norm_words = []
+    word_to_token = []
+    for i, tok in enumerate(raw_tokens):
+        for w in normalize(tok).split():
+            norm_words.append(w)
+            word_to_token.append(i)
+    return raw_tokens, norm_words, word_to_token
+
+
+def _word_range_for_chars(norm_words, start_char, end_char):
+    """Map a char range in " ".join(norm_words) to a (start, end) word index range."""
+    pos = 0
+    start_word = end_word = None
+    for idx, w in enumerate(norm_words):
+        w_start, w_end = pos, pos + len(w)
+        if start_word is None and w_end > start_char:
+            start_word = idx
+        if w_start < end_char:
+            end_word = idx
+        pos = w_end + 1  # +1 for the joining space
+
+    if start_word is None:
+        start_word = 0
+    if end_word is None:
+        end_word = len(norm_words) - 1
+    return start_word, end_word
+
+
+def _raw_text_for_word_range(raw_tokens, word_to_token, start_word, end_word):
+    """Return the original-case label text spanning the given word range."""
+    if not raw_tokens or not word_to_token:
+        return ""
+    start_tok = word_to_token[start_word]
+    end_tok = word_to_token[end_word]
+    return " ".join(raw_tokens[start_tok:end_tok + 1])
+
+
 def best_match_ratio(needle: str, haystack: str):
     """Return (similarity ratio 0-1, best matching substring of haystack).
+
+    The returned substring preserves the original case/punctuation as it
+    appears in `haystack` (e.g. the raw OCR text), so the UI can show what
+    was actually found on the label rather than a normalized (uppercased)
+    version of it.
 
     First checks for a direct substring match (fast path, ratio = 1.0).
     Otherwise slides a window of roughly-needle-sized length over the
@@ -65,31 +119,39 @@ def best_match_ratio(needle: str, haystack: str):
     blob of OCR'd label text.
     """
     needle_n = normalize(needle)
-    haystack_n = normalize(haystack)
 
     if not needle_n:
         return 0.0, ""
 
-    if needle_n in haystack_n:
-        return 1.0, needle_n
+    raw_tokens, norm_words, word_to_token = _tokenize_with_normalization(haystack)
+    haystack_n = " ".join(norm_words)
 
-    words = haystack_n.split()
-    needle_word_count = max(len(needle_n.split()), 1)
-
-    if not words:
+    if not norm_words:
         return 0.0, ""
 
+    if needle_n in haystack_n:
+        start_char = haystack_n.index(needle_n)
+        end_char = start_char + len(needle_n)
+        start_word, end_word = _word_range_for_chars(norm_words, start_char, end_char)
+        return 1.0, _raw_text_for_word_range(raw_tokens, word_to_token, start_word, end_word)
+
+    needle_word_count = max(len(needle_n.split()), 1)
+
     best_ratio = 0.0
-    best_window = ""
+    best_range = (0, 0)
     # allow the window to be a bit longer/shorter than the needle
     for window_size in (needle_word_count, needle_word_count + 2, max(needle_word_count - 1, 1)):
-        for i in range(len(words) - window_size + 1):
-            window = " ".join(words[i:i + window_size])
+        for i in range(len(norm_words) - window_size + 1):
+            window = " ".join(norm_words[i:i + window_size])
             ratio = difflib.SequenceMatcher(None, needle_n, window).ratio()
             if ratio > best_ratio:
                 best_ratio = ratio
-                best_window = window
+                best_range = (i, i + window_size - 1)
 
+    if best_ratio == 0.0:
+        return 0.0, ""
+
+    best_window = _raw_text_for_word_range(raw_tokens, word_to_token, *best_range)
     return best_ratio, best_window
 
 
@@ -171,11 +233,18 @@ def verify_alcohol_content_format(ocr_text: str) -> dict:
                     "alcohol content must be stated as a percentage by volume (27 CFR 5.65).",
         }
 
-    # Look for an acceptable "Alc"/"Vol" abbreviation near the percentage.
-    window_start = max(pct_match.start() - 20, 0)
-    window_end = min(pct_match.end() + 20, len(upper_ocr))
-    window = upper_ocr[window_start:window_end].strip()
-    has_alc_or_vol = "ALC" in window or "VOL" in window
+    # Look for an acceptable "Alc"/"Vol" abbreviation near the percentage,
+    # using a window of whole words (rather than a raw character slice) so
+    # the displayed text doesn't include stray newlines or cut-off words.
+    tokens = [(m.group(), m.start(), m.end()) for m in re.finditer(r"\S+", ocr_text)]
+    token_idx = next(
+        (i for i, (_, s, e) in enumerate(tokens) if s <= pct_match.start() < e),
+        0,
+    )
+    start_idx = max(token_idx - 2, 0)
+    end_idx = min(token_idx + 2, len(tokens) - 1)
+    window = " ".join(tok for tok, _, _ in tokens[start_idx:end_idx + 1])
+    has_alc_or_vol = "ALC" in window.upper() or "VOL" in window.upper()
 
     notes = []
     status = "MATCH"
@@ -223,11 +292,15 @@ def verify_government_warning(ocr_text: str) -> dict:
          bold cannot be checked via OCR).
       3. "Surgeon" and "General" are capitalized ("Surgeon General").
 
-    Caveat (documented in README): OCR case detection is not fully
-    reliable, and Tesseract does not report bold/font-weight at all, so
-    the "bold" requirement cannot be verified automatically. When wording
-    matches but a capitalization check is inconclusive, we mark the result
-    as REVIEW rather than a silent pass.
+    Any of these failing is treated as MISMATCH (overall FAIL), since the
+    wording and capitalization requirements are legally exact.
+
+    Caveat (documented in README): Tesseract does not report bold/font-weight
+    at all, so the "bold" requirement cannot be verified automatically - only
+    the capitalization of "GOVERNMENT WARNING" and "Surgeon General" is
+    checked here. OCR case detection can occasionally misread a label that is
+    actually compliant, so a MISMATCH on capitalization alone should be
+    double-checked visually.
     """
     upper_ocr = ocr_text.upper()
     warning_start = upper_ocr.find("GOVERNMENT WARNING")
@@ -266,11 +339,10 @@ def verify_government_warning(ocr_text: str) -> dict:
         notes.append("Warning text does not match the required statement")
         status = "MISMATCH"
 
-    if not has_allcaps_prefix and status == "MATCH":
-        status = "REVIEW"
+    if not has_allcaps_prefix:
+        status = "MISMATCH"
         notes.append(
-            "Could not confirm 'GOVERNMENT WARNING:' is rendered in all caps and bold - "
-            "OCR case detection is unreliable, please verify visually (required by regulation)"
+            "'GOVERNMENT WARNING:' must be rendered in capital letters and bold (27 CFR Part 16)"
         )
 
     # "Surgeon" and "General" must be capitalized.
@@ -278,8 +350,7 @@ def verify_government_warning(ocr_text: str) -> dict:
     if sg_match:
         surgeon_word, general_word = sg_match.group().split()
         if not (surgeon_word[0] == "S" and general_word[0] == "G"):
-            if status == "MATCH":
-                status = "REVIEW"
+            status = "MISMATCH"
             notes.append(
                 "'Surgeon' and 'General' do not appear to be capitalized - "
                 "the 'S' in Surgeon and 'G' in General must be capitalized (27 CFR Part 16)"
@@ -288,7 +359,7 @@ def verify_government_warning(ocr_text: str) -> dict:
     return {
         "field": "Government Warning Statement",
         "expected": STANDARD_GOV_WARNING,
-        "found": matched_text,
+        "found": " ".join(warning_section.split()),
         "status": status,
         "score": round(ratio, 2),
         "note": " | ".join(notes),

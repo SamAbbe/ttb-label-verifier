@@ -1,6 +1,51 @@
 filename,brand_name,class_type,alcohol_content,net_contents,bottler_info,country_of_origin
-label_01_match.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
-label_02_case_diff.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
-label_03_bad_warning.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
-label_04_wrong_abv.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
-label_05_import_skewed.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_01_old_tom_match.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_02_old_tom_case_diff.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_03_old_tom_bad_warning.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_04_old_tom_wrong_abv.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_05_old_tom_skewed.png,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Old Tom Distillery, Bardstown, KY",
+label_06_stones_throw_match.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_07_stones_throw_case_diff.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_08_stones_throw_bad_warning.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_09_stones_throw_wrong_abv.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_10_stones_throw_skewed.png,STONE'S THROW,American Dry Gin,40% Alc./Vol. (80 Proof),750 mL,"Stone's Throw Distilling Co., Seattle, WA",
+label_11_harbor_light_match.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_12_harbor_light_case_diff.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_13_harbor_light_bad_warning.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_14_harbor_light_wrong_abv.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_15_harbor_light_skewed.png,HARBOR LIGHT BREWING,India Pale Ale,6.5% Alc./Vol.,12 FL OZ,"Harbor Light Brewing Co., Portland, OR",
+label_16_silver_creek_match.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_17_silver_creek_case_diff.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_18_silver_creek_bad_warning.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_19_silver_creek_wrong_abv.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_20_silver_creek_skewed.png,SILVER CREEK VODKA,Vodka,40% Alc./Vol. (80 Proof),1 L,"Silver Creek Distillers, Denver, CO",
+label_21_valle_verde_match.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_22_valle_verde_case_diff.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_23_valle_verde_bad_warning.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_24_valle_verde_wrong_abv.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_25_valle_verde_skewed.png,VALLE VERDE,Blanco Tequila,40% Alc./Vol. (80 Proof),750 mL,"Destileria Valle Verde, Jalisco, Mexico",Mexico
+label_26_red_barn_match.png,RED BARN FARMS,Apple Brandy,40% Alc./Vol. (80 Proof),750 mL,"Red Barn Farms Distillery, Asheville, NC",
+label_27_red_barn_case_diff.png,RED BARN FARMS,Apple Brandy,40% Alc./Vol. (80 Proof),750 mL,"Red Barn Farms Distillery, Asheville, NC",
+label_28_red_barn_bad_warning.png,RED BARN FARMS,Apple Brandy,40% Alc./Vol. (80 Proof),750 mL,"Red Barn Farms Distillery, Asheville, NC",
+label_29_red_barn_wrong_abv.png,RED BARN FARMS,Apple Brandy,40% Alc./Vol. (80 Proof),750 mL,"Red Barn Farms Distillery, Asheville, NC",
+label_30_red_barn_skewed.png,RED BARN FARMS,Apple Brandy,40% Alc./Vol. (80 Proof),750 mL,"Red Barn Farms Distillery, Asheville, NC",
+label_31_northwind_match.png,NORTHWIND DISTILLERY,Straight Rye Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Northwind Distillery, Spokane, WA",
+label_32_northwind_case_diff.png,NORTHWIND DISTILLERY,Straight Rye Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Northwind Distillery, Spokane, WA",
+label_33_northwind_bad_warning.png,NORTHWIND DISTILLERY,Straight Rye Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Northwind Distillery, Spokane, WA",
+label_34_northwind_wrong_abv.png,NORTHWIND DISTILLERY,Straight Rye Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Northwind Distillery, Spokane, WA",
+label_35_northwind_skewed.png,NORTHWIND DISTILLERY,Straight Rye Whiskey,45% Alc./Vol. (90 Proof),750 mL,"Northwind Distillery, Spokane, WA",
+label_36_crystal_springs_match.png,CRYSTAL SPRINGS,White Rum,40% Alc./Vol. (80 Proof),750 mL,"Crystal Springs Distillers, Austin, TX",
+label_37_crystal_springs_case_diff.png,CRYSTAL SPRINGS,White Rum,40% Alc./Vol. (80 Proof),750 mL,"Crystal Springs Distillers, Austin, TX",
+label_38_crystal_springs_bad_warning.png,CRYSTAL SPRINGS,White Rum,40% Alc./Vol. (80 Proof),750 mL,"Crystal Springs Distillers, Austin, TX",
+label_39_crystal_springs_wrong_abv.png,CRYSTAL SPRINGS,White Rum,40% Alc./Vol. (80 Proof),750 mL,"Crystal Springs Distillers, Austin, TX",
+label_40_crystal_springs_skewed.png,CRYSTAL SPRINGS,White Rum,40% Alc./Vol. (80 Proof),750 mL,"Crystal Springs Distillers, Austin, TX",
+label_41_highland_mist_match.png,HIGHLAND MIST,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Highland Mist Distillers, Speyside, Scotland",Scotland
+label_42_highland_mist_case_diff.png,HIGHLAND MIST,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Highland Mist Distillers, Speyside, Scotland",Scotland
+label_43_highland_mist_bad_warning.png,HIGHLAND MIST,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Highland Mist Distillers, Speyside, Scotland",Scotland
+label_44_highland_mist_wrong_abv.png,HIGHLAND MIST,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Highland Mist Distillers, Speyside, Scotland",Scotland
+label_45_highland_mist_skewed.png,HIGHLAND MIST,Blended Scotch Whisky,43% Alc./Vol. (86 Proof),750 mL,"Highland Mist Distillers, Speyside, Scotland",Scotland
+label_46_sunny_acres_match.png,SUNNY ACRES,Coffee Liqueur,24% Alc./Vol.,750 mL,"Sunny Acres Distillery, Sacramento, CA",
+label_47_sunny_acres_case_diff.png,SUNNY ACRES,Coffee Liqueur,24% Alc./Vol.,750 mL,"Sunny Acres Distillery, Sacramento, CA",
+label_48_sunny_acres_bad_warning.png,SUNNY ACRES,Coffee Liqueur,24% Alc./Vol.,750 mL,"Sunny Acres Distillery, Sacramento, CA",
+label_49_sunny_acres_wrong_abv.png,SUNNY ACRES,Coffee Liqueur,24% Alc./Vol.,750 mL,"Sunny Acres Distillery, Sacramento, CA",
+label_50_sunny_acres_skewed.png,SUNNY ACRES,Coffee Liqueur,24% Alc./Vol.,750 mL,"Sunny Acres Distillery, Sacramento, CA",

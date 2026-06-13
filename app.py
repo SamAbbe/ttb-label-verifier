@@ -20,7 +20,7 @@ from PIL import Image
 
 import pytesseract
 
-from ocr_utils import extract_text
+from ocr_utils import extract_text, preprocess_image
 from verification import FIELD_LABELS, verify_label, overall_status
 
 
@@ -154,6 +154,9 @@ with tab_single:
 
         with st.expander("Raw text extracted from label (OCR)"):
             st.text(ocr_text or "(no text detected)")
+
+        with st.expander("Preprocessed image (skew-corrected, used for OCR)"):
+            st.image(preprocess_image(image), caption="After deskew/contrast adjustments", width=300)
 
 # ---------------------------------------------------------------------------
 # Batch upload

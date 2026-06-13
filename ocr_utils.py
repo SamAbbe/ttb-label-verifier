@@ -21,17 +21,17 @@ if shutil.which("tesseract") is None:
         pytesseract.pytesseract.tesseract_cmd = default_windows_path
 
 
-def _projection_score(img: Image.Image, angle: float) -> float:
+def _projection_score(img: Image.Image, angle: float, fillcolor: int) -> float:
     """Score how well `angle` aligns text lines horizontally.
 
-    Rotates a binarized copy of the image, sums dark pixels per row, and
+    Rotates a binarized copy of the image, sums "ink" pixels per row, and
     returns the variance of that row-sum profile. Horizontal text lines
     produce sharp peaks/troughs (high variance); a skewed image smears
-    dark pixels across rows (low variance).
+    ink pixels across rows (low variance).
     """
-    rotated = img.rotate(angle, expand=True, fillcolor=255, resample=Image.BICUBIC)
+    rotated = img.rotate(angle, expand=True, fillcolor=fillcolor, resample=Image.BICUBIC)
     arr = np.array(rotated)
-    row_sums = np.sum(arr < 128, axis=1)
+    row_sums = np.sum(arr == 0, axis=1)
     return float(np.var(row_sums))
 
 
@@ -44,25 +44,37 @@ def deskew_image(img: Image.Image) -> Image.Image:
     try a range of rotation angles and keep the one that makes the image's
     row-by-row "ink density" profile most peaked (i.e. text lines line up
     horizontally).
-    """
-    bw = img.point(lambda x: 0 if x < 128 else 255)
 
-    best_angle, best_score = 0.0, _projection_score(bw, 0.0)
+    Works for both dark-text-on-light and light-text-on-dark images: the
+    binarization and rotation fill color are chosen based on which polarity
+    the image actually is, so the "ink" mask and the blank corners introduced
+    by rotation are consistent.
+    """
+    is_dark_bg = np.array(img).mean() < 128
+    if is_dark_bg:
+        bw = img.point(lambda x: 0 if x >= 128 else 255)
+        fillcolor = 255
+    else:
+        bw = img.point(lambda x: 0 if x < 128 else 255)
+        fillcolor = 255
+
+    best_angle, best_score = 0.0, _projection_score(bw, 0.0, fillcolor)
     for angle in np.arange(-15, 15.5, 0.5):
-        score = _projection_score(bw, angle)
+        score = _projection_score(bw, angle, fillcolor)
         if score > best_score:
             best_angle, best_score = float(angle), score
 
     # Refine around the coarse best angle.
     for angle in np.arange(best_angle - 0.5, best_angle + 0.5, 0.1):
-        score = _projection_score(bw, angle)
+        score = _projection_score(bw, angle, fillcolor)
         if score > best_score:
             best_angle, best_score = float(angle), score
 
     if abs(best_angle) < 0.1:
         return img
 
-    return img.rotate(best_angle, expand=True, fillcolor=255, resample=Image.BICUBIC)
+    rotate_fill = 0 if is_dark_bg else 255
+    return img.rotate(best_angle, expand=True, fillcolor=rotate_fill, resample=Image.BICUBIC)
 
 
 def preprocess_image(image: Image.Image) -> Image.Image:
@@ -75,6 +87,12 @@ def preprocess_image(image: Image.Image) -> Image.Image:
     """
     img = image.convert("L")  # grayscale
     img = deskew_image(img)
+
+    # Light text on a dark background (common on dark bottle labels) reads
+    # very poorly with Tesseract's defaults, which expect dark text on a
+    # light background. Invert if the image is predominantly dark.
+    if np.array(img).mean() < 128:
+        img = ImageOps.invert(img)
 
     # Upscale small images - Tesseract is much more accurate around
     # ~1500px on the long edge.

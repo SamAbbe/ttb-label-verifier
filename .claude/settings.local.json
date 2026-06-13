@@ -3,7 +3,22 @@
     "allow": [
       "Bash(python -c ' *)",
       "Bash(python -c \"import numpy; print\\(numpy.__version__\\)\")",
-      "WebFetch(domain:www.ttb.gov)"
+      "WebFetch(domain:www.ttb.gov)",
+      "Bash(python generate_samples.py)",
+      "Bash(attrib sample_applications.csv)",
+      "Bash(python -c \"import PIL; print\\(PIL.__version__\\)\")",
+      "Bash(ls -la)",
+      "Bash(dir)",
+      "Bash(python -c \"import matplotlib; print\\(matplotlib.get_data_path\\(\\)\\)\")",
+      "Bash(python -c \"import matplotlib, os; p=os.path.join\\(matplotlib.get_data_path\\(\\),'fonts','ttf'\\); print\\(os.listdir\\(p\\)\\)\")",
+      "Bash(ls /c/Windows/Fonts/ 2>/dev/null | grep -iE \"georgia|times|trebuc|courier|arial|impact|garamond|consola|verdana\" | head -30)",
+      "Bash(cp /c/Windows/Fonts/georgia.ttf .)",
+      "Bash(cp /c/Windows/Fonts/georgiab.ttf .)",
+      "Bash(cp /c/Windows/Fonts/trebuc.ttf .)",
+      "Bash(cp /c/Windows/Fonts/trebucbd.ttf .)",
+      "Bash(cp /c/Windows/Fonts/verdana.ttf .)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('app.py'\\).read\\(\\)\\); print\\('ok'\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('app.py', encoding='utf-8'\\).read\\(\\)\\); print\\('ok'\\)\")"
     ]
   }
 }
